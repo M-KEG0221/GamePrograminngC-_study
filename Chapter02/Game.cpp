@@ -186,10 +186,10 @@ void Game::LoadData()
 	TileMapComponent* tm = new TileMapComponent(temp);
 	tm->SetScreenSize(screen);
 	SDL_Texture* tstex = GetTexture("Assets/Tiles.png");
-	tm->SetTileSet(tstex, 8, 24);
+	tm->SetTileSet(tstex, 24, 8);
 
-	tm->LoadCSV("Assets/MapLayer1.csv");
-	//tm->LoadCSV("Assets/MapLayer2.csv");
+	//tm->LoadCSV("Assets/MapLayer1.csv");
+	tm->LoadCSV("Assets/MapLayer2.csv");
 	//tm->LoadCSV("Assets/MapLayer3.csv");
 }
 

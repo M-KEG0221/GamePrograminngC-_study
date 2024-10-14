@@ -10,16 +10,12 @@ TileMapComponent::TileMapComponent(Actor* owner, int drawOrder)
 {
 }
 
-void TileMapComponent::SetTileSet(SDL_Texture* texture, const int rows, const int columns
-)
+void TileMapComponent::SetTileSet(SDL_Texture* tileSetTexture, const int rows, const int columns)
 {
-	SetTexture(texture);
-	TileSet tsd;
-	tsd.mTexture = texture;
-	tsd.c = columns;
-	tsd.r = rows;
-	SDL_QueryTexture(texture, NULL, NULL, &tsd.w, &tsd.h);
-	mTileSet = tsd;
+	mTileSet.mTexture = tileSetTexture;
+	mTileSet.columns = columns;
+	mTileSet.rows = rows;
+	SDL_QueryTexture(tileSetTexture, NULL, NULL, &mTileSet.width, &mTileSet.height);
 }
 
 void TileMapComponent::Update(float deltaTime)
@@ -31,8 +27,8 @@ void TileMapComponent::Draw(SDL_Renderer* renderer)
 {
 	SDL_Rect srcRect;
 	//タイルは全て同じ大きさなので予め設定
-	srcRect.w = static_cast<int>(mTileSet.w / mTileSet.r);
-	srcRect.h = static_cast<int>(mTileSet.h / mTileSet.c);
+	srcRect.w = static_cast<int>(mTileSet.width / mTileSet.columns);
+	srcRect.h = static_cast<int>(mTileSet.height / mTileSet.rows);
 
 	int rowIdx = 0;
 	for (auto& tileMapRow : mTileMap)
@@ -43,8 +39,8 @@ void TileMapComponent::Draw(SDL_Renderer* renderer)
 			if (tile != -1)
 			{
 				// 描画したいタイルマップ上のタイル位置
-				srcRect.x = static_cast<int>((tile % mTileSet.r) * srcRect.w);
-				srcRect.y = static_cast<int>((tile / mTileSet.r) * srcRect.h);
+				srcRect.x = static_cast<int>((tile % mTileSet.columns) * srcRect.w);
+				srcRect.y = static_cast<int>((tile / mTileSet.columns) * srcRect.h);
 
 				SDL_Rect dstRect;
 				// タイルの描画サイズ
@@ -55,7 +51,7 @@ void TileMapComponent::Draw(SDL_Renderer* renderer)
 				dstRect.y = static_cast<int>(rowIdx * dstRect.h);
 
 				SDL_RenderCopy(renderer,
-					mTexture,
+					mTileSet.mTexture,
 					&srcRect,
 					&dstRect
 				);
@@ -78,20 +74,19 @@ void TileMapComponent::LoadCSV(const std::string& fileName)
 		return;//要検討。ゲームを落とす処理がベスト？
 	}
 
-	//csvファイル1行をrowStrに入れる。それを最後の行まで繰り返す
-	std::string rowStr;
-	while (std::getline(tileMap, rowStr))
+	//csvファイル1行をtilesRowStrに入れる。それを最後の行まで繰り返す
+	std::string tilesRowStr;
+	while (std::getline(tileMap, tilesRowStr))
 	{
-		std::vector<int> rowTiles;
+		std::vector<int> addTilesRow;
 		std::string tileStr;
-		std::istringstream iss(rowStr);//入力専用の文字列ストリーム
+		std::istringstream iss(tilesRowStr);//入力専用の文字列ストリーム
 
 		while (std::getline(iss, tileStr, ','))
 		{
-			int tile = std::stoi(tileStr);//String TO Int 
-			rowTiles.push_back(tile);
+			addTilesRow.push_back(std::stoi(tileStr));//String TO Int );
 		}
 
-		mTileMap.push_back(rowTiles);
+		mTileMap.push_back(addTilesRow);
 	}
 }
