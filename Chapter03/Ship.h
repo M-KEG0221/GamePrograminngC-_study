@@ -23,12 +23,12 @@ private:
 	ShipState mState;
 
 
-	class MoveComponent* mMc;
+	class InputComponent* mMove;
 	class SpriteComponent* mSc;
 
 	float mLaserCooldown;
 	class CircleComponent* mCircle;
 
 	float mRespawnTime;
-	float mElapsedDeadTime;
+	float mRespawnTimeRemaining;
 };

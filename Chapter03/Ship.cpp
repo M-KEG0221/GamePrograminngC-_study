@@ -19,7 +19,7 @@ Ship::Ship(Game* game)
 	:Actor(game)
 	, mLaserCooldown(0.0f)
 	, mRespawnTime(2.0f)
-	, mElapsedDeadTime(0.0f)
+	, mRespawnTimeRemaining(mRespawnTime)
 	, mState(ShipState::Alive)
 {
 	// Create a sprite component
@@ -27,16 +27,14 @@ Ship::Ship(Game* game)
 	mSc->SetTexture(game->GetTexture("Assets/Ship.png"));
 
 	// Create an input component and set keys/speed
-	InputComponent* ic = new InputComponent(this);
-	ic->SetForwardKey(SDL_SCANCODE_W);
-	ic->SetBackKey(SDL_SCANCODE_S);
-	ic->SetClockwiseKey(SDL_SCANCODE_A);
-	ic->SetCounterClockwiseKey(SDL_SCANCODE_D);
-	ic->SetMaxForwardSpeed(300.0f);
-	ic->SetMaxAngularSpeed(Math::TwoPi);
-	ic->SetFriction(60.0f);
-
-	mMc = ic;
+	mMove = new InputComponent(this);
+	mMove->SetForwardKey(SDL_SCANCODE_W);
+	mMove->SetBackKey(SDL_SCANCODE_S);
+	mMove->SetClockwiseKey(SDL_SCANCODE_A);
+	mMove->SetCounterClockwiseKey(SDL_SCANCODE_D);
+	mMove->SetMaxForwardSpeed(300.0f);
+	mMove->SetMaxAngularSpeed(Math::TwoPi);
+	mMove->SetFriction(60.0f);
 
 	mCircle = new CircleComponent(this);
 	mCircle->SetRadius(40.0f);
@@ -46,7 +44,6 @@ void Ship::UpdateActor(float deltaTime)
 {
 	mLaserCooldown -= deltaTime;
 
-	//game‚©‚çmAsteeroid‚ðŽæ“¾
 	Game* game = GetGame();
 	std::vector<Asteroid*> asteroids = game->GetAsteroids();
 
@@ -59,16 +56,14 @@ void Ship::UpdateActor(float deltaTime)
 			{
 				mState = ShipState::Dead;
 				mSc->SetTexture(nullptr);
-				mMc->ResetVelocity();
-				//‘¬“x‚ð0‚É‚·‚é
 			}
 		}
 		break;
 	case ShipState::Dead:
-		mElapsedDeadTime += deltaTime;
+		mRespawnTimeRemaining -= deltaTime;
 
-		if (mElapsedDeadTime >= mRespawnTime) {
-			mElapsedDeadTime = 0.0f;
+		if (mRespawnTimeRemaining <= 0.0f) {
+			mRespawnTimeRemaining = mRespawnTime;
 
 			SetPosition(Vector2(512.0f, 384.0f));
 			SetRotation(Math::PiOver2);
