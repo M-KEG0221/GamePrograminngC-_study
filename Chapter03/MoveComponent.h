@@ -27,7 +27,7 @@ public:
 	void AddForce(float force);
 	void AddForce();
 	void SetFriction(float friction) { mFriction = friction; }
-	void ResetVelocity() { mVerocity = Vector2(); }
+	void ResetVelocity() { mVerocity = Vector2(); }//–¢Žg—p
 private:
 	// Controls rotation (radians/second)
 	float mAngularSpeed;

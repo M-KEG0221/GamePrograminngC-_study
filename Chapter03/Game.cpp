@@ -171,7 +171,7 @@ void Game::LoadData()
 	mShip->SetRotation(Math::PiOver2);
 
 	// Create asteroids
-	const int numAsteroids = 2;
+	const int numAsteroids = 20;
 	for (int i = 0; i < numAsteroids; i++)
 	{
 		new Asteroid(this);
@@ -337,7 +337,7 @@ void Game::OutputProblem2()
 	Vector2 a(-1, 1);
 	Vector2 b(2, 4);
 	Vector2 c(3, 3);
-	std::cout << "【課題3.1-2】A=<-1,1>, B=<2,4>, C=<3, 3>" << std::endl;
+	std::cout << "【課題3.1-2】A=<-1,1>, B=<2,4>, C=<3, 3>, ABとACのなす角は?" << std::endl;
 
 	//ABを求める
 	Vector2 ab(b - a);//<3, 3>
@@ -363,13 +363,13 @@ void Game::OutputProblem2()
 
 void Game::OutputProblem3()
 {
-	Vector2 wp(1, 0);
-	Vector2 player(4, 0);
-	Vector2 nwp(5, 6);
+	Vector2 wp(1, 0);		//現在の目標位置
+	Vector2 player(4, 0);	//プレイヤーの位置
+	Vector2 nwp(5, 6);		//新しい目標位置
 	std::cout << "【課題3.1-3】" << std::endl;
 
 	Vector2 nwpN = Vector2::Normalize(nwp);
-	std::cout << "(a): newWaypointの単位ベクトル = " <<
+	std::cout << "(a): newWaypoint（player→nwp）の単位ベクトル = " <<
 		"<" << nwpN.x << "," << nwpN.y << ">"
 		<< std::endl;
 

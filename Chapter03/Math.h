@@ -41,6 +41,7 @@ namespace Math
 			return false;
 		}
 	}
+
 	//inline bool NearZero(Vector2 val, float epsilon = 0.001f)
 	//{
 	//	if (fabs(val.Length()) <= epsilon)

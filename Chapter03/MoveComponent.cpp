@@ -29,8 +29,6 @@ void MoveComponent::Update(float deltaTime)
 		mOwner->SetRotation(rot);
 	}
 
-	float registSpeed = -mForwardSpeed;
-
 	//if (!Math::NearZero(mForwardSpeed)) // 物理計算は常に行われるため、条件を外す
 
 	// F=m.aからa=F/mをし、加速度を求める（空気抵抗も考慮）
@@ -39,9 +37,10 @@ void MoveComponent::Update(float deltaTime)
 	// v=v0+atから現在の速度にa*deltatimeを加算
 	mVerocity += acceleration * deltaTime;
 
-	//x=x0+v0tから現在の位置にv*deltatimeを加算
+	//x=x0+vtから現在の位置にv*deltatimeを加算
 	Vector2 pos = mOwner->GetPosition();
-	pos += mVerocity * deltaTime;//deltaTimeが2回掛かってるから極端に遅くなる
+	pos += mVerocity * deltaTime;//deltaTimeが2回掛かるため、極端に遅くなる
+	//x=v0t+at^2/2と厳密にしなくてもよい
 
 	// (Screen wrapping code only for asteroids)
 	if (pos.x < 0.0f) { pos.x = 1022.0f; }
@@ -52,6 +51,7 @@ void MoveComponent::Update(float deltaTime)
 
 	mOwner->SetPosition(pos);
 
+	//所持撃力をリセット
 	mForce = Vector2();
 }
 
@@ -62,7 +62,7 @@ void MoveComponent::AddForce(Vector2 force)
 
 void MoveComponent::AddForce(float force)
 {
-	AddForce(mOwner->GetForward() * force);
+	AddForce(force * mOwner->GetForward());
 }
 
 void MoveComponent::AddForce()

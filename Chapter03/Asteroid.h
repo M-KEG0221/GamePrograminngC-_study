@@ -17,5 +17,5 @@ public:
 	class CircleComponent* GetCircle() { return mCircle; }
 private:
 	class CircleComponent* mCircle;
-	class MoveComponent* mMc;
+	class MoveComponent* mMove;
 };

@@ -33,10 +33,12 @@ void InputComponent::ProcessInput(const uint8_t* keyState)
 		forwardSpeed -= mMaxForwardSpeed;
 	}
 	SetForwardSpeed(forwardSpeed);
-	if (forwardSpeed != 0.0f)
-	{
-		AddForce(forwardSpeed * 60);
-	}
+
+	//å≥ÅXAddForce()Ç…speed * 60ÇìnÇµÇƒÇ¢ÇΩ
+	//if (forwardSpeed != 0.0f)
+	//{
+	AddForce();
+	//}
 
 	// Calculate angular speed for MoveComponent
 	float angularSpeed = 0.0f;

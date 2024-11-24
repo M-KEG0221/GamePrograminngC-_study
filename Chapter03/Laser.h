@@ -20,5 +20,5 @@ public:
 private:
 	class CircleComponent* mCircle;
 	float mDeathTimer;
-	class MoveComponent* mMc;
+	class MoveComponent* mMove;
 };
